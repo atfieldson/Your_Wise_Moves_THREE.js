@@ -1,0 +1,22 @@
+{
+  "name": "your_wise_moves_three",
+  "version": "1.0.0",
+  "description": "",
+  "main": "client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atfieldson/Your_Wise_Moves_THREE.js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/atfieldson/Your_Wise_Moves_THREE.js/issues"
+  },
+  "homepage": "https://github.com/atfieldson/Your_Wise_Moves_THREE.js#readme",
+  "dependencies": {
+    "three": "^0.98.0"
+  }
+}
