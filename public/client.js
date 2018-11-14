@@ -25,9 +25,8 @@ camera.position.set(0, 0, 200);
 let scene = new THREE.Scene();
 
 //Fog
-fogColor = new THREE.Color(0xFFFFFF);
-
-scene.fog = new THREE.Fog(fogColor, 2, 500);
+// fogColor = new THREE.Color(0xFFFFFF);
+// scene.fog = new THREE.Fog(fogColor, 2, 500);
 
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0, 0)
@@ -161,31 +160,31 @@ wood.position.set(29, -9, 0)
 
 
 //----------------Curve path experiment------------------
-let curve = new THREE.CubicBezierCurve3(
+let curveEarthOutside = new THREE.CubicBezierCurve3(
 	new THREE.Vector3( 0, -30, 0 ), //starting point
     new THREE.Vector3( 0, -40, 30 ),//control points, both
     new THREE.Vector3( 0, -40, 60 ),//of these are necessary
 	new THREE.Vector3( 0, 0, 90 ), //ending point
 );
-let points = curve.getPoints( 50 );
-let geometry = new THREE.BufferGeometry().setFromPoints( points );
-let material = new THREE.LineBasicMaterial( { color : 0x000000 } );
+let pointsEarthOutside = curveEarthOutside.getPoints( 160 );
+let geoEarthOutside = new THREE.BufferGeometry().setFromPoints( pointsEarthOutside );
+let matEarthOutside = new THREE.LineBasicMaterial( { color : 0x000000 } );
 // Create the final object to add to the scene
-let curveObject = new THREE.Line( geometry, material );
+let curveEarthOutsideObject = new THREE.Line( geoEarthOutside, matEarthOutside );
 
 
-let curve2 = new THREE.CubicBezierCurve3(
+let curveEarthInside = new THREE.CubicBezierCurve3(
 	new THREE.Vector3( 0, -30, 0 ),
     new THREE.Vector3( 0, 10, 30 ),
     new THREE.Vector3( 0, 10, 60 ),
 	new THREE.Vector3( 0, 0, 90 ),
 );
-let points2 = curve2.getPoints( 50 );
-let geometry2 = new THREE.BufferGeometry().setFromPoints( points2 );
-let material2 = new THREE.LineBasicMaterial( { color : 0x000000 } );
+let pointsEarthInside = curveEarthInside.getPoints( 160 );
+let geoEarthInside = new THREE.BufferGeometry().setFromPoints( pointsEarthInside );
+let matEarthInside = new THREE.LineBasicMaterial( { color : 0x000000 } );
 // Create the final object to add to the scene
-let curveObject2 = new THREE.Line( geometry2, material2 );
-scene.add(curveObject, curveObject2)
+let curveEarthInsideObject = new THREE.Line( geoEarthInside, matEarthInside );
+scene.add(curveEarthOutsideObject, curveEarthInsideObject)
 
 //render
 // requestAnimationFrame(animate);
@@ -252,99 +251,54 @@ function ease(t) {
 }
 
 //************ */Moving along curve experiment***************
-
-    //starting and ending position
-    // let a = { x: 0, y: -30, z: 0 }
-    // let b = { x: 0, y: 0, z: 90 }
-
-    //starting and ending position for yinYang
-    // let ya = { x: 0, y: 0, z: 90 }
-    // let yb = { x: 0, y: -30, z: 0 }
-
-    // if (earth.position.z < b.z && backwardsEarth === false) {
-        
-        // earth.position.x = lerp(a.x, b.x, ease(ti));
-        // earth.position.y = lerp(a.y, b.y, ease(ti));
-        // earth.position.z = lerp(a.z, b.z, ease(ti));
-        // yinYang.position.x = lerp(ya.x, yb.x, ease(ti));
-        // yinYang.position.y = lerp(ya.y, yb.y, ease(ti));
-        // yinYang.position.z = lerp(ya.z, yb.z, ease(ti));
-
-
-    //     requestAnimationFrame(moveEarthToFront);
-    // } else if (earth.position.z >= b.z && backwardsEarth === false) {
-    //     backwardsEarth = true;
-    //     requestAnimationFrame(moveEarthToFront);
-    // } else if (backwardsEarth === true && earth.position.z > a.z) {
-    //     th += step;
-    //     earth.position.x = lerp(b.x, a.x, ease(th));
-    //     earth.position.y = lerp(b.y, a.y, ease(th));
-    //     earth.position.z = lerp(b.z, a.z, ease(th));
-    //     yinYang.position.x = lerp(yb.x, ya.x, ease(th));
-    //     yinYang.position.y = lerp(yb.y, ya.y, ease(th));
-    //     yinYang.position.z = lerp(yb.z, ya.z, ease(th));
-
-    //     requestAnimationFrame(moveEarthToFront);
-    // } else if (backwardsEarth === true && earth.position.z <= a.z) {
-    //     ti = 0;
-    //     th = 0;
-    //     console.log('end of earth')
-    //     backwardsEarth = false
-    //     moveWoodToFront()
-    // }
-// }
-//************ */End moving along curve experiment***************
-
+let i = 0
 
 function moveEarthToFront() {
     ti += step;
-    //starting and ending position
-    let a = { x: 0, y: -30, z: 0 }
-    let b = { x: 0, y: 0, z: 90 }
 
-    //starting and ending position for yinYang
-    let ya = { x: 0, y: 0, z: 0 }
-    let yb = { x: 0, y: -30, z: 0 }
+    // starting and ending position
+    // let a = { x: 0, y: -30, z: 0 }
+    // let b = { x: 0, y: 0, z: 90 }
 
-    if (earth.position.z < b.z && backwardsEarth === false) {
-        //I kept the old code in EARTH for reference, the below is the eased
-        //version of the above code.  Easing the animation makes it much 
-        //more smooth
-        // earth.position.x = la.x + (b.x - a.x) * ti;
+    // starting and ending position for yinYang
+    // let ya = { x: 0, y: 0, z: 90 }
+    // let yb = { x: 0, y: -30, z: 0 }
+
+
+    if (i < pointsEarthInside.length -1 && backwardsEarth === false) { 
+        let a = pointsEarthOutside[i]
+        let b = pointsEarthOutside[i + 1]
+        let ya = pointsEarthInside[pointsEarthInside.length-(i+ 1)]
+        let yb = pointsEarthInside[pointsEarthInside.length-(i+2)]
         earth.position.x = lerp(a.x, b.x, ease(ti));
-        // earth.position.y = a.y + (b.y - a.y) * ti;
         earth.position.y = lerp(a.y, b.y, ease(ti));
-        // earth.position.z = a.z + (b.z - a.z) * ti;
         earth.position.z = lerp(a.z, b.z, ease(ti));
-        // yinYang.position.x = ya.x + (yb.x - ya.x) * ti;
         yinYang.position.x = lerp(ya.x, yb.x, ease(ti));
-        // yinYang.position.y = ya.y + (yb.y - ya.y) * ti;
         yinYang.position.y = lerp(ya.y, yb.y, ease(ti));
-        // yinYang.position.z = ya.x + (yb.z - ya.z) * ti;
         yinYang.position.z = lerp(ya.z, yb.z, ease(ti));
 
-
+        i++
         requestAnimationFrame(moveEarthToFront);
-    } else if (earth.position.z >= b.z && backwardsEarth === false) {
+    } else if (i === pointsEarthInside.length - 1 && backwardsEarth === false) {
         backwardsEarth = true;
+        i--
         requestAnimationFrame(moveEarthToFront);
-    } else if (backwardsEarth === true && earth.position.z > a.z) {
+    } else if (i > 0 && backwardsEarth === true) {
         th += step;
-        // earth.position.x = b.x + (a.x - b.x) * th;
+        let a = pointsEarthInside[i];
+        let b = pointsEarthInside[i + 1];
+        let ya = pointsEarthOutside[pointsEarthInside.length-(i+ 1)]
+        let yb = pointsEarthOutside[pointsEarthInside.length-(i+2)]
         earth.position.x = lerp(b.x, a.x, ease(th));
-        // earth.position.y = b.y + (a.y - b.y) * th;
         earth.position.y = lerp(b.y, a.y, ease(th));
-        // earth.position.z = b.z + (a.z - b.z) * th;
         earth.position.z = lerp(b.z, a.z, ease(th));
-        // yinYang.position.x = yb.x + (ya.x - yb.x) * th;
         yinYang.position.x = lerp(yb.x, ya.x, ease(th));
-        // yinYang.position.y = yb.y + (ya.y - yb.y) * th;
         yinYang.position.y = lerp(yb.y, ya.y, ease(th));
-        // yinYang.position.z = yb.x + (ya.z - yb.z) * th;
         yinYang.position.z = lerp(yb.z, ya.z, ease(th));
-
+        
+        i--
         requestAnimationFrame(moveEarthToFront);
-    } else if (backwardsEarth === true && earth.position.z <= a.z) {
+    } else if (backwardsEarth === true && i === 0) {
         ti = 0;
         th = 0;
         console.log('end of earth')
@@ -352,6 +306,65 @@ function moveEarthToFront() {
         moveWoodToFront()
     }
 }
+//************ */End moving along curve experiment***************
+
+
+// function moveEarthToFront() {
+//     ti += step;
+//     //starting and ending position
+//     let a = { x: 0, y: -30, z: 0 }
+//     let b = { x: 0, y: 0, z: 90 }
+
+//     //starting and ending position for yinYang
+//     let ya = { x: 0, y: 0, z: 0 }
+//     let yb = { x: 0, y: -30, z: 0 }
+
+//     if (earth.position.z < b.z && backwardsEarth === false) {
+//         //I kept the old code in EARTH for reference, the below is the eased
+//         //version of the above code.  Easing the animation makes it much 
+//         //more smooth
+//         // earth.position.x = la.x + (b.x - a.x) * ti;
+//         earth.position.x = lerp(a.x, b.x, ease(ti));
+//         // earth.position.y = a.y + (b.y - a.y) * ti;
+//         earth.position.y = lerp(a.y, b.y, ease(ti));
+//         // earth.position.z = a.z + (b.z - a.z) * ti;
+//         earth.position.z = lerp(a.z, b.z, ease(ti));
+//         // yinYang.position.x = ya.x + (yb.x - ya.x) * ti;
+//         yinYang.position.x = lerp(ya.x, yb.x, ease(ti));
+//         // yinYang.position.y = ya.y + (yb.y - ya.y) * ti;
+//         yinYang.position.y = lerp(ya.y, yb.y, ease(ti));
+//         // yinYang.position.z = ya.x + (yb.z - ya.z) * ti;
+//         yinYang.position.z = lerp(ya.z, yb.z, ease(ti));
+
+
+//         requestAnimationFrame(moveEarthToFront);
+//     } else if (earth.position.z >= b.z && backwardsEarth === false) {
+//         backwardsEarth = true;
+//         requestAnimationFrame(moveEarthToFront);
+//     } else if (backwardsEarth === true && earth.position.z > a.z) {
+//         th += step;
+//         // earth.position.x = b.x + (a.x - b.x) * th;
+//         earth.position.x = lerp(b.x, a.x, ease(th));
+//         // earth.position.y = b.y + (a.y - b.y) * th;
+//         earth.position.y = lerp(b.y, a.y, ease(th));
+//         // earth.position.z = b.z + (a.z - b.z) * th;
+//         earth.position.z = lerp(b.z, a.z, ease(th));
+//         // yinYang.position.x = yb.x + (ya.x - yb.x) * th;
+//         yinYang.position.x = lerp(yb.x, ya.x, ease(th));
+//         // yinYang.position.y = yb.y + (ya.y - yb.y) * th;
+//         yinYang.position.y = lerp(yb.y, ya.y, ease(th));
+//         // yinYang.position.z = yb.x + (ya.z - yb.z) * th;
+//         yinYang.position.z = lerp(yb.z, ya.z, ease(th));
+
+//         requestAnimationFrame(moveEarthToFront);
+//     } else if (backwardsEarth === true && earth.position.z <= a.z) {
+//         ti = 0;
+//         th = 0;
+//         console.log('end of earth')
+//         backwardsEarth = false
+//         moveWoodToFront()
+//     }
+// }
 
 
 backwardsWood = false
