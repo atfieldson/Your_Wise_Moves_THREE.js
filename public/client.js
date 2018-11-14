@@ -13,7 +13,7 @@ renderer.setViewport(0, 0, 1000, 1000)
 //using clientWidth and height below is what allows the proportions to remain accurate, as distinct
 //from using window.innerWidth and height.
 let camera = new THREE.PerspectiveCamera(35, myCanvas.clientWidth / myCanvas.clientHeight, 2, 1000)
-// controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 
 renderer.setClearColor(0xC0DFDF);
@@ -29,8 +29,8 @@ fogColor = new THREE.Color(0xFFFFFF);
 
 scene.fog = new THREE.Fog(fogColor, 2, 500);
 
-// controls = new THREE.OrbitControls(camera, renderer.domElement);
-// controls.target.set(0, 0, 0)
+controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0, 0)
 
 //lights
 // let light = new THREE.AmbientLight(0xffffff, .3);
@@ -126,8 +126,8 @@ water.overdraw = true;
 water.castShadow = true;
 scene.add(water);
 //Pentagon position radius 40
-water.position.x = -24;
-water.position.y = 32;
+// water.position.x = -24;
+// water.position.y = 32;
 //Pentagon position radius 30
 water.position.set(-18, 24, 0)
 
@@ -160,6 +160,33 @@ scene.add(wood);
 wood.position.set(29, -9, 0)
 
 
+//----------------Curve path experiment------------------
+let curve = new THREE.CubicBezierCurve3(
+	new THREE.Vector3( 0, -30, 0 ), //starting point
+    new THREE.Vector3( 0, -40, 30 ),//control points, both
+    new THREE.Vector3( 0, -40, 60 ),//of these are necessary
+	new THREE.Vector3( 0, 0, 90 ), //ending point
+);
+let points = curve.getPoints( 50 );
+let geometry = new THREE.BufferGeometry().setFromPoints( points );
+let material = new THREE.LineBasicMaterial( { color : 0x000000 } );
+// Create the final object to add to the scene
+let curveObject = new THREE.Line( geometry, material );
+
+
+let curve2 = new THREE.CubicBezierCurve3(
+	new THREE.Vector3( 0, -30, 0 ),
+    new THREE.Vector3( 0, 10, 30 ),
+    new THREE.Vector3( 0, 10, 60 ),
+	new THREE.Vector3( 0, 0, 90 ),
+);
+let points2 = curve2.getPoints( 50 );
+let geometry2 = new THREE.BufferGeometry().setFromPoints( points2 );
+let material2 = new THREE.LineBasicMaterial( { color : 0x000000 } );
+// Create the final object to add to the scene
+let curveObject2 = new THREE.Line( geometry2, material2 );
+scene.add(curveObject, curveObject2)
+
 //render
 // requestAnimationFrame(animate);
 //initial render
@@ -174,9 +201,9 @@ function animate() {
     // plane.rotation.y += .01;
     renderer.render(scene, camera);
     background.rotation.z -= .001;
-    camera.rotation.z -= .001;
+    // camera.rotation.z -= .001;
     clouds.rotation.y += .002;
-    // controls.update();
+    controls.update();
     t += 0.002;
     s += 0.004;
     r += 0.008;
@@ -213,9 +240,7 @@ let th = 0
 let backwardsEarth = false;
 
 function lerp(a, b, t) { 
-    let speed = 0.5;
-    let direction = new THREE.Vector3( 1, 0, 0 );
-    let vector = direction.multiplyScalar( speed, speed, speed );
+    
     return a + (b - a) * t 
 }
 
@@ -226,6 +251,51 @@ function ease(t) {
     return t<.5 ? 8*t*t*t*t : 1-8*(--t)*t*t*t 
 }
 
+//************ */Moving along curve experiment***************
+
+    //starting and ending position
+    // let a = { x: 0, y: -30, z: 0 }
+    // let b = { x: 0, y: 0, z: 90 }
+
+    //starting and ending position for yinYang
+    // let ya = { x: 0, y: 0, z: 90 }
+    // let yb = { x: 0, y: -30, z: 0 }
+
+    // if (earth.position.z < b.z && backwardsEarth === false) {
+        
+        // earth.position.x = lerp(a.x, b.x, ease(ti));
+        // earth.position.y = lerp(a.y, b.y, ease(ti));
+        // earth.position.z = lerp(a.z, b.z, ease(ti));
+        // yinYang.position.x = lerp(ya.x, yb.x, ease(ti));
+        // yinYang.position.y = lerp(ya.y, yb.y, ease(ti));
+        // yinYang.position.z = lerp(ya.z, yb.z, ease(ti));
+
+
+    //     requestAnimationFrame(moveEarthToFront);
+    // } else if (earth.position.z >= b.z && backwardsEarth === false) {
+    //     backwardsEarth = true;
+    //     requestAnimationFrame(moveEarthToFront);
+    // } else if (backwardsEarth === true && earth.position.z > a.z) {
+    //     th += step;
+    //     earth.position.x = lerp(b.x, a.x, ease(th));
+    //     earth.position.y = lerp(b.y, a.y, ease(th));
+    //     earth.position.z = lerp(b.z, a.z, ease(th));
+    //     yinYang.position.x = lerp(yb.x, ya.x, ease(th));
+    //     yinYang.position.y = lerp(yb.y, ya.y, ease(th));
+    //     yinYang.position.z = lerp(yb.z, ya.z, ease(th));
+
+    //     requestAnimationFrame(moveEarthToFront);
+    // } else if (backwardsEarth === true && earth.position.z <= a.z) {
+    //     ti = 0;
+    //     th = 0;
+    //     console.log('end of earth')
+    //     backwardsEarth = false
+    //     moveWoodToFront()
+    // }
+// }
+//************ */End moving along curve experiment***************
+
+
 function moveEarthToFront() {
     ti += step;
     //starting and ending position
@@ -233,7 +303,7 @@ function moveEarthToFront() {
     let b = { x: 0, y: 0, z: 90 }
 
     //starting and ending position for yinYang
-    let ya = { x: 0, y: 0, z: 90 }
+    let ya = { x: 0, y: 0, z: 0 }
     let yb = { x: 0, y: -30, z: 0 }
 
     if (earth.position.z < b.z && backwardsEarth === false) {
