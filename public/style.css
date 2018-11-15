@@ -1,4 +1,6 @@
 #myCanvas {
-    height: 1000px;
-    width: 1000px;
+    height: 80%;
+    width: 80%;
+    -webkit-clip-path: circle(50% at 50% 50%);
+    clip-path: circle(50% at 50% 50%);
 }
