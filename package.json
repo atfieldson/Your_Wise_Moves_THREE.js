@@ -5,13 +5,13 @@
   "main": "client.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server/server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atfieldson/Your_Wise_Moves_THREE.js.git"
   },
-  "author": "",
+  "author": "Adam Fieldson",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/atfieldson/Your_Wise_Moves_THREE.js/issues"
@@ -20,5 +20,8 @@
   "dependencies": {
     "express": "^4.16.4",
     "three": "^0.98.0"
+  },
+  "engines": {
+    "node": "8.12.0"
   }
 }
