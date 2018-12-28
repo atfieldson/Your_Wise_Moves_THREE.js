@@ -55,11 +55,15 @@ scene.add(light5)
 
 
 //background
-let geoBackground = new THREE.PlaneBufferGeometry(200, 200, 32);
-let matBackground = new THREE.MeshBasicMaterial({ color: 0xC0DFDF});
-let background = new THREE.Mesh(geoBackground, matBackground);
+const backgroundTexture = new THREE.TextureLoader().load('./images/threebackground.jpg');
+
+const geoBackground = new THREE.PlaneBufferGeometry(800, 800, 32);
+const matBackground = new THREE.MeshBasicMaterial({ map: backgroundTexture });
+const background = new THREE.Mesh(geoBackground, matBackground);
 background.receiveShadow = true;
 background.position.z = -20;
+background.position.y = -200;
+background.rotation.z = -Math.PI / 6;
 scene.add(background);
 
 //------------------------------SPHERES----------------------------------
@@ -68,7 +72,7 @@ scene.add(background);
 let textureClouds = new THREE.TextureLoader().load('./images/clouds5.jpg');
 
 let geoClouds = new THREE.SphereGeometry(80, 100, 100);
-let matClouds = new THREE.MeshPhongMaterial({ alphaMap: textureClouds});
+let matClouds = new THREE.MeshPhongMaterial({ alphaMap: textureClouds });
 let clouds = new THREE.Mesh(geoClouds, matClouds);
 matClouds.transparent = true
 scene.add(clouds);
@@ -76,7 +80,7 @@ scene.add(clouds);
 let textureClouds2 = new THREE.TextureLoader().load('./images/clouds2.jpg');
 
 let geoClouds2 = new THREE.SphereGeometry(110, 100, 100);
-let matClouds2 = new THREE.MeshPhongMaterial({ alphaMap: textureClouds2});
+let matClouds2 = new THREE.MeshPhongMaterial({ alphaMap: textureClouds2 });
 let clouds2 = new THREE.Mesh(geoClouds2, matClouds2);
 matClouds2.transparent = true
 scene.add(clouds2);
@@ -152,7 +156,7 @@ scene.add(fire);
 // fire.position.x = 24;
 // fire.position.y = 32;
 //Pentagon position radius 30
-fire.position.set(24, 32, 0)
+fire.position.set(38, -12, 0)
 
 let textureWood = new THREE.TextureLoader().load('./images/wood.jpg');
 
@@ -166,7 +170,7 @@ scene.add(wood);
 // wood.position.x = 38;
 // wood.position.y = -12;
 //Pentagon position radius 30
-wood.position.set(38, -12, 0)
+wood.position.set(24, 32, 0);
 //------------------------------END SPHERES----------------------------------
 
 
@@ -174,21 +178,21 @@ wood.position.set(38, -12, 0)
 //----------------------------CURVE PATH------------------------------------
 let createBezierCurve = (a, b, c, d) => {
     let curve = new THREE.CubicBezierCurve3(
-        new THREE.Vector3( a.x, a.y, a.z ), //starting point
-        new THREE.Vector3( b.x, b.y, b.z ),//control points, both
-        new THREE.Vector3( c.x, c.y, c.z ),//of these are necessary
-        new THREE.Vector3( d.x, d.y, d.z ), //ending point
+        new THREE.Vector3(a.x, a.y, a.z), //starting point
+        new THREE.Vector3(b.x, b.y, b.z),//control points, both
+        new THREE.Vector3(c.x, c.y, c.z),//of these are necessary
+        new THREE.Vector3(d.x, d.y, d.z), //ending point
     );
-    let points = curve.getPoints( 1256 );
-    
+    let points = curve.getPoints(1256);
+
     return points
 }
 
 let drawCurve = (points) => {
-    let geometry = new THREE.BufferGeometry().setFromPoints( points );
-    let material = new THREE.LineBasicMaterial( { color : 0x000000 } );
+    let geometry = new THREE.BufferGeometry().setFromPoints(points);
+    let material = new THREE.LineBasicMaterial({ color: 0x000000 });
     // Create the final object to add to the scene
-    let curve = new THREE.Line( geometry, material );
+    let curve = new THREE.Line(geometry, material);
     return curve;
 }
 
@@ -198,73 +202,73 @@ let drawCurve = (points) => {
 
 
 let pointsEarthOutside = createBezierCurve(
-    {x: 0, y: -40, z: 0},
-    {x: 0, y: -30, z: 30}, 
-    {x: 0, y: -30, z: 70}, 
-    {x: 0, y: 0, z: 120},  
+    { x: 0, y: -40, z: 0 },
+    { x: 0, y: -30, z: 30 },
+    { x: 0, y: -30, z: 70 },
+    { x: 0, y: 0, z: 120 },
 )
 
 let pointsEarthInside = createBezierCurve(
-    {x: 0, y: -40, z: 0},
-    {x: 0, y: 10, z: 30}, 
-    {x: 0, y: 10, z: 70}, 
-    {x: 0, y: 0, z: 120},  
-)
-
-let pointsWoodOutside = createBezierCurve(
-    {x: 38, y: -12, z: 0},
-    {x:29, y: -9, z: 30}, 
-    {x: 29, y: -9, z: 70}, 
-    {x: 0, y: 0, z: 120},  
-)
-
-let pointsWoodInside = createBezierCurve(
-    {x: 38, y: -12, z: 0},
-    {x:-10, y: 3, z: 30}, 
-    {x: -10, y: 3, z: 70}, 
-    {x: 0, y: 0, z: 120},  
+    { x: 0, y: -40, z: 0 },
+    { x: 0, y: 10, z: 30 },
+    { x: 0, y: 10, z: 70 },
+    { x: 0, y: 0, z: 120 },
 )
 
 let pointsFireOutside = createBezierCurve(
-    {x: 24, y: 32, z: 0},
-    {x:18, y: 24, z: 30}, 
-    {x: 18, y: 24, z: 70}, 
-    {x: 0, y: 0, z: 120}, 
+    { x: 38, y: -12, z: 0 },
+    { x: 29, y: -9, z: 30 },
+    { x: 29, y: -9, z: 70 },
+    { x: 0, y: 0, z: 120 },
 )
 
 let pointsFireInside = createBezierCurve(
-    {x: 24, y: 32, z: 0},
-    {x:-6, y: -8, z: 30}, 
-    {x: -6, y: -8, z: 70}, 
-    {x: 0, y: 0, z: 120}, 
+    { x: 38, y: -12, z: 0 },
+    { x: -10, y: 3, z: 30 },
+    { x: -10, y: 3, z: 70 },
+    { x: 0, y: 0, z: 120 },
+)
+
+let pointsWoodOutside = createBezierCurve(
+    { x: 24, y: 32, z: 0 },
+    { x: 18, y: 24, z: 30 },
+    { x: 18, y: 24, z: 70 },
+    { x: 0, y: 0, z: 120 },
+)
+
+let pointsWoodInside = createBezierCurve(
+    { x: 24, y: 32, z: 0 },
+    { x: -6, y: -8, z: 30 },
+    { x: -6, y: -8, z: 70 },
+    { x: 0, y: 0, z: 120 },
 )
 
 let pointsWaterOutside = createBezierCurve(
-    {x: -24, y: 32, z: 0},
-    {x:-18, y: 24, z: 30}, 
-    {x: -18, y: 24, z: 70}, 
-    {x: 0, y: 0, z: 120}, 
+    { x: -24, y: 32, z: 0 },
+    { x: -18, y: 24, z: 30 },
+    { x: -18, y: 24, z: 70 },
+    { x: 0, y: 0, z: 120 },
 )
 
 let pointsWaterInside = createBezierCurve(
-    {x: -24, y: 32, z: 0},
-    {x:6, y: -8, z: 30}, 
-    {x: 6, y: -8, z: 70}, 
-    {x: 0, y: 0, z: 120}, 
+    { x: -24, y: 32, z: 0 },
+    { x: 6, y: -8, z: 30 },
+    { x: 6, y: -8, z: 70 },
+    { x: 0, y: 0, z: 120 },
 )
 
 let pointsMetalOutside = createBezierCurve(
-    {x: -38, y: -12, z: 0},
-    {x:-29, y: -9, z: 30}, 
-    {x: -29, y: -9, z: 70}, 
-    {x: 0, y: 0, z: 120}, 
+    { x: -38, y: -12, z: 0 },
+    { x: -29, y: -9, z: 30 },
+    { x: -29, y: -9, z: 70 },
+    { x: 0, y: 0, z: 120 },
 )
 
 let pointsMetalInside = createBezierCurve(
-    {x: -38, y: -12, z: 0},
-    {x:10, y: 3, z: 30}, 
-    {x: 10, y: 3, z: 70}, 
-    {x: 0, y: 0, z: 120}, 
+    { x: -38, y: -12, z: 0 },
+    { x: 10, y: 3, z: 30 },
+    { x: 10, y: 3, z: 70 },
+    { x: 0, y: 0, z: 120 },
 )
 
 // let curveEarthOutsideLine = drawCurve(pointsEarthOutside);
@@ -294,12 +298,17 @@ renderer.render(scene, camera);
 // let s = 0;
 // let r = 0;
 
+rotateBackground = (numOfSegments) => {
+    background.rotation.z += (Math.PI / 3) / numOfSegments;
+}
+
 function animate() {
     requestAnimationFrame(animate);
     // plane.rotation.y += .01;
     renderer.render(scene, camera);
     background.rotation.z -= .001;
     camera.rotation.z -= .001;
+    background.rotation.z += .001;
     clouds.rotation.y += .002;
     clouds2.rotation.y += .002;
     // controls.update();
@@ -327,12 +336,12 @@ function animate() {
 let speedArchitect = (max, subSteps) => {
     let blueprint = [];
     let speeds = [.01, .02, .04, .07, .12, .15, .18, .15, .12, .07, .04, .02, .01];
-    let subSpeeds = speeds.map(speed => speed/subSteps);
+    let subSpeeds = speeds.map(speed => speed / subSteps);
     let currentPoint = 0;
     blueprint.push(currentPoint);
     for (let speed of subSpeeds) {
-        for (let i = 0; i < subSteps; i++){
-            currentPoint = currentPoint + max*speed;
+        for (let i = 0; i < subSteps; i++) {
+            currentPoint = currentPoint + max * speed;
             blueprint.push(currentPoint);
         }
     }
@@ -341,16 +350,16 @@ let speedArchitect = (max, subSteps) => {
 
 let backwards = false
 let i = 0
-
+let j = 0
 //
 function moveSphereForward(pointsArrayOutside, pointsArrayInside, sphere) {
 
     let easedArray = speedArchitect(pointsArrayOutside.length, 16)
 
-    if (i < easedArray.length - 1 && backwards === false) { 
+    if (i < easedArray.length - 1 && backwards === false) {
         let bPoint = easedArray[i];
         let b = pointsArrayOutside[parseInt(bPoint)];
-        let ybPoint = easedArray[easedArray.length-(i+1)];
+        let ybPoint = easedArray[easedArray.length - (i + 1)];
         let yb = pointsArrayInside[parseInt(ybPoint)];
         sphere.position.x = b.x
         sphere.position.y = b.y
@@ -358,14 +367,14 @@ function moveSphereForward(pointsArrayOutside, pointsArrayInside, sphere) {
         yinYang.position.x = yb.x;
         yinYang.position.y = yb.y;
         yinYang.position.z = yb.z;
-    
+        rotateBackground(easedArray.length);
         i++
         requestAnimationFrame(() => moveSphereForward(pointsArrayOutside, pointsArrayInside, sphere));
     } else if (i === easedArray.length - 1 && backwards === false) {
         backwards = true;
-        sphere.position.x = pointsArrayOutside[pointsArrayOutside.length-1].x;
-        sphere.position.y = pointsArrayOutside[pointsArrayOutside.length-1].y;
-        sphere.position.z = pointsArrayOutside[pointsArrayOutside.length-1].z;
+        sphere.position.x = pointsArrayOutside[pointsArrayOutside.length - 1].x;
+        sphere.position.y = pointsArrayOutside[pointsArrayOutside.length - 1].y;
+        sphere.position.z = pointsArrayOutside[pointsArrayOutside.length - 1].z;
         yinYang.position.x = pointsArrayInside[0].x;
         yinYang.position.y = pointsArrayInside[0].y;
         yinYang.position.z = pointsArrayInside[0].z;
@@ -377,11 +386,13 @@ function moveSphereForward(pointsArrayOutside, pointsArrayInside, sphere) {
 function moveSphereBack(pointsArrayOutside, pointsArrayInside, sphere) {
 
     let easedArray = speedArchitect(pointsArrayOutside.length, 16)
-
+    if (j===4){
+        rotateBackground(easedArray.length); 
+    }
     if (i > 0 && backwards === true) {
         let bPoint = easedArray[i];
         let b = pointsArrayInside[parseInt(bPoint)]
-        let ybPoint = easedArray[easedArray.length-(i+1)];
+        let ybPoint = easedArray[easedArray.length - (i + 1)];
         let yb = pointsArrayOutside[parseInt(ybPoint)]
         sphere.position.x = b.x;
         sphere.position.y = b.y;
@@ -393,8 +404,26 @@ function moveSphereBack(pointsArrayOutside, pointsArrayInside, sphere) {
         requestAnimationFrame(() => moveSphereBack(pointsArrayOutside, pointsArrayInside, sphere));
     } else if (backwards === true && i === 0) {
         backwards = false
+        if (j === 0) {
+            moveSphereForward(pointsWaterOutside, pointsWaterInside, water);
+            j++;
+        } else if (j === 1) {
+            moveSphereForward(pointsWoodOutside, pointsWoodInside, wood)
+            j++;
+        } else if (j === 2) {
+            moveSphereForward(pointsFireOutside, pointsFireInside, fire);
+            j++;
+        } else if (j === 3) {
+        moveSphereForward(pointsEarthOutside, pointsEarthInside, earth)
+        j++;
+        } else if (j === 4) {
+            moveSphereForward(pointsMetalOutside, pointsMetalInside, metal);
+            j = 0;
+        }
     }
 }
+
+moveSphereForward(pointsMetalOutside, pointsMetalInside, metal);
 
 
 // moveSphereForward(pointsEarthOutside, pointsEarthInside, earth)
@@ -403,7 +432,7 @@ function moveSphereBack(pointsArrayOutside, pointsArrayInside, sphere) {
 // moveSphereBack(pointsWoodOutside, pointsWoodInside, wood)
 // moveSphereForward(pointsFireOutside, pointsFireInside, fire);
 // moveSphereBack(pointsFireOutside, pointsFireInside, fire);   
-moveSphereForward(pointsWaterOutside, pointsWaterInside, water);
+// moveSphereForward(pointsWaterOutside, pointsWaterInside, water);
 // moveSphereBack(pointsWaterOutside, pointsWaterInside, water);
 // moveSphereForward(pointsMetalOutside, pointsMetalInside, metal);
 // moveSphereBack(pointsMetalOutside, pointsMetalInside, metal);
@@ -426,7 +455,7 @@ moveSphereForward(pointsWaterOutside, pointsWaterInside, water);
 //         yinYang.position.x = yb.x;
 //         yinYang.position.y = yb.y;
 //         yinYang.position.z = yb.z;
-    
+
 //         i++
 //         requestAnimationFrame(moveEarthToFront);
 //     } else if (i === easedArray.length - 1 && backwardsEarth === false) {
